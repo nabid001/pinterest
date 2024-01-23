@@ -1,4 +1,5 @@
 import PinForm from "@/components/PinForm";
+import UploadPhoto from "@/components/UploadPhoto";
 
 const Create = () => {
   return (
@@ -6,7 +7,7 @@ const Create = () => {
       <div className="grid w-[1000px] grid-cols-2 border p-10 shadow-sm">
         <div className="grid place-items-center">
           <div className="grid h-[340px] w-[300px] place-content-center rounded-lg bg-gray-200 shadow-sm">
-            <h1>Upload</h1>
+            <UploadPhoto />
           </div>
         </div>
 
