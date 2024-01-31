@@ -10,7 +10,7 @@ const breakpoints = {
   2000: 5,
   1200: 3,
   1000: 2,
-  500: 1,
+  500: 2,
 };
 
 const MasonryLayout = ({ pins }: any) => {
@@ -21,8 +21,8 @@ const MasonryLayout = ({ pins }: any) => {
         breakpointCols={breakpoints}
         columnClassName="flex flex-col gap-2"
       >
-        {data?.map((pins) => (
-          <Pin key={pins.id} pins={pins} className="w-max" />
+        {pins?.map((pin: any) => (
+          <Pin key={pin._id} pin={pin} className="w-max" />
         ))}
       </Masonry>
     </div>

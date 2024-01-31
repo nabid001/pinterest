@@ -5,8 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { Button } from "./ui/button";
 
-const UploadPhoto = () => {
-  const [photo, setPhoto] = useState<string>("");
+const UploadPhoto = ({ photo, setPhoto }: { photo: string; setPhoto: any }) => {
   return (
     <>
       {photo ? (
