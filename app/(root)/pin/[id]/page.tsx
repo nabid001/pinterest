@@ -1,4 +1,6 @@
 import DeletePin from "@/components/DeletePin";
+import CommentForm from "@/components/forms/CommentForm";
+import { getCommentById } from "@/lib/mongodb/actions/comment.actions";
 import { getPinById } from "@/lib/mongodb/actions/pin.actions";
 import { auth } from "@clerk/nextjs";
 import Link from "next/link";
@@ -13,6 +15,7 @@ const page = async ({ params: { id } }: PageProps) => {
   const pin = await getPinById(id);
   const { sessionClaims } = await auth();
   const userId = sessionClaims?.userId as string;
+  const comment = await getCommentById(id);
 
   let deleteCheck = userId === pin?.author._id;
 
@@ -63,7 +66,12 @@ const page = async ({ params: { id } }: PageProps) => {
 
           <div className="flex flex-col gap-2">
             <span className="disabled:">Comments</span>
-            <span className="text-gray-500">No comments yet!</span>
+
+            <CommentForm
+              author={userId}
+              pinId={pin?._id}
+              comment={comment && comment}
+            />
           </div>
         </div>
       </div>

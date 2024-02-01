@@ -1,10 +1,11 @@
 "use server";
 
-import { CreatePinParams } from "@/lib/types";
+import { CreateCommentParams, CreatePinParams } from "@/lib/types";
 import Pin from "../models/pin.model";
 import { connectToDatabase } from "../mongodb.connection";
 import User from "../models/user.model";
 import { revalidatePath } from "next/cache";
+import Comment from "../models/comment.model";
 
 const populatePin = async (query: any) => {
   return query.populate({
@@ -12,6 +13,23 @@ const populatePin = async (query: any) => {
     model: User,
     select: "_id email clerkId username photo firstName lastName",
   });
+};
+
+const populateComment = async (query: any) => {
+  return query.populate({
+    path: "comments",
+    model: Comment,
+    select: "_id text author",
+  });
+  query
+    .populate({
+      path: "author",
+      model: User,
+      select: "_id email clerkId username photo firstName lastName",
+    })
+    .populate({
+      path: "author",
+    });
 };
 
 export const createPin = async ({
@@ -60,8 +78,18 @@ export const getPinById = async (id: string) => {
       console.log("id is not defined");
     }
 
-    const pins = await populatePin(Pin.findById({ _id: id }));
-
+    const pins = await Pin.findById({ _id: id })
+      .populate({
+        path: "author",
+        model: User,
+        select: "_id email clerkId username photo firstName lastName",
+      })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "author",
+        },
+      });
     return JSON.parse(JSON.stringify(pins));
   } catch (error) {
     throw new Error(error as any);
@@ -79,5 +107,31 @@ export const deletePinByUserId = async (id: string) => {
     return JSON.parse(JSON.stringify(deletePin));
   } catch (error) {
     throw new Error("failed to delete pin");
+  }
+};
+
+export const createComment = async ({
+  text,
+  pinId,
+  author,
+  path,
+}: CreateCommentParams) => {
+  try {
+    await connectToDatabase();
+
+    const newComment = await Comment.create({
+      text,
+      author,
+      pinId,
+    });
+
+    await Pin.findByIdAndUpdate(
+      { _id: pinId },
+      { $push: { comments: newComment } }
+    );
+
+    revalidatePath(path);
+  } catch (error) {
+    throw new Error(error as any);
   }
 };

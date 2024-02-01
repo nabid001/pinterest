@@ -5,7 +5,13 @@ export default async function Home() {
   const pins = await getPins();
   return (
     <div className="container mx-auto mt-5 px-2">
-      {pins && <MasonryLayout pins={pins} />}
+      {pins ? (
+        <>
+          <MasonryLayout pins={pins} />
+        </>
+      ) : (
+        <h1>no pins</h1>
+      )}
     </div>
   );
 }
