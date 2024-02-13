@@ -10,7 +10,7 @@ const Create = async () => {
   return (
     <div className="container mx-auto mt-10 max-w-5xl">
       <div className="grid grid-cols-1 gap-4 rounded-lg py-5 shadow-md sm:grid-cols-[35%,1fr] sm:gap-3">
-        <PinForm author={userId} />
+        <PinForm type="Create" author={userId} />
       </div>
     </div>
   );

@@ -1,9 +1,22 @@
 import DeletePin from "@/components/DeletePin";
+import DropDown from "@/components/DropDown";
 import CommentForm from "@/components/forms/CommentForm";
+import { Button } from "@/components/ui/button";
 import { getCommentById } from "@/lib/mongodb/actions/comment.actions";
 import { getPinById } from "@/lib/mongodb/actions/pin.actions";
 import { auth } from "@clerk/nextjs";
 import Link from "next/link";
+import { FiShare } from "react-icons/fi";
+import { MdOutlineMoreHoriz } from "react-icons/md";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import PinShare from "@/components/PinShare";
 
 type PageProps = {
   params: {
@@ -27,16 +40,41 @@ const page = async ({ params: { id } }: PageProps) => {
         </div>
 
         <div className="mt-5 flex flex-col gap-14 px-4 sm:mt-5 sm:gap-10">
-          <div className="flex items-center justify-between gap-5">
-            {deleteCheck && <DeletePin id={pin?._id} />}
-            <a
-              href={pin?.image}
-              className="ml-auto"
-              download={pin?.title}
-              target="_blank"
-            >
-              Download
-            </a>
+          <div className="flex items-center gap-3">
+            <PinShare pinTitle={pin?.title}/>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost">
+                  <MdOutlineMoreHoriz className="text-3xl" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <a
+                      href={pin?.image}
+                      className=""
+                      download={pin?.title}
+                      target="_blank"
+                    >
+                      Download
+                    </a>
+                  </DropdownMenuItem>
+                  {deleteCheck && (
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link href={`/pin/update/${pin?._id}`}>Edit</Link>
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <Button variant="default" className="ml-auto">
+              Save
+            </Button>
           </div>
 
           <div className="flex flex-col gap-5">

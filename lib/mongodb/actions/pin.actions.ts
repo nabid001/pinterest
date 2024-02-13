@@ -96,9 +96,13 @@ export const getPinById = async (id: string) => {
   }
 };
 
-export const deletePinByUserId = async (id: string) => {
+export const deletePin = async (id: string | undefined) => {
   try {
     await connectToDatabase();
+
+    if (!id) {
+      throw new Error("id is not defined");
+    }
 
     const deletePin = await Pin.deleteOne({ _id: id });
 
@@ -131,6 +135,39 @@ export const createComment = async ({
     );
 
     revalidatePath(path);
+  } catch (error) {
+    throw new Error(error as any);
+  }
+};
+
+type UpdatePinProps = {
+  pin: {
+    title: string;
+    description: string;
+    link: string;
+    image?: string;
+  };
+  pinId: string;
+  path: string;
+};
+
+export const updatePin = async ({ pin, path, pinId }: UpdatePinProps) => {
+  try {
+    await connectToDatabase();
+
+    const pinToUpdate = Pin.findById(pinId);
+    if (!pinToUpdate) {
+      throw new Error("Unauthorized or pin not found");
+    }
+
+    const newPin = await Pin.findByIdAndUpdate(
+      pinId,
+      { ...pin },
+      { new: true }
+    );
+    revalidatePath(path);
+
+    return JSON.parse(JSON.stringify(newPin));
   } catch (error) {
     throw new Error(error as any);
   }
