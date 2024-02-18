@@ -5,12 +5,14 @@ export default async function Home() {
   const pins = await getPins();
   return (
     <div className="container mx-auto mt-5 px-2">
-      {pins ? (
+      {pins?.length > 0 ? (
         <>
           <MasonryLayout pins={pins} />
         </>
       ) : (
-        <h1>no pins</h1>
+        <h1 className="grid place-content-center text-lg text-gray-500 min-h-screen">
+          no pins yet
+        </h1>
       )}
     </div>
   );

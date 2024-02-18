@@ -1,4 +1,5 @@
 import { Schema, model, models } from "mongoose";
+import { string } from "zod";
 
 const pinSchema = new Schema({
   image: { type: String, required: true },
@@ -7,6 +8,7 @@ const pinSchema = new Schema({
   link: { type: String },
   author: { type: Schema.Types.ObjectId, ref: "User", required: true },
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+  createdBy: { type: String, required: true },
 });
 
 const Pin = models.Pin || model("Pin", pinSchema);

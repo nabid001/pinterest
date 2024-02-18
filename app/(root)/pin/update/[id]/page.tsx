@@ -1,6 +1,7 @@
 import PinForm from "@/components/PinForm";
 import { getPinById } from "@/lib/mongodb/actions/pin.actions";
-import { auth } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 type Props = {
   params: {
@@ -8,13 +9,17 @@ type Props = {
   };
 };
 
-const page = async ({ params: { id } }: Props) => {
+const PinUpdate = async ({ params: { id } }: Props) => {
+  const user = await currentUser();
+
   const { sessionClaims } = await auth();
   const userId = sessionClaims?.userId as string;
 
-  const pin = await getPinById(id);
+  if (!user) {
+    redirect("/login");
+  }
 
-  //   console.log(pin);
+  const pin = await getPinById(id);
 
   return (
     <div className="container mx-auto mt-10 max-w-5xl">
@@ -25,4 +30,4 @@ const page = async ({ params: { id } }: Props) => {
   );
 };
 
-export default page;
+export default PinUpdate;

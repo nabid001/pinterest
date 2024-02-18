@@ -30,24 +30,3 @@ const MasonryLayout = ({ pins }: any) => {
 };
 
 export default MasonryLayout;
-
-{
-  /* <ResponsiveMasonry columnsCountBreakPoints={breakpoints}>
-  <Masonry gutter="6px">
-    <div className=""></div>
-    <Image
-      src="/0.jpg"
-      width={250}
-      height={250}
-      alt="img"
-      className="rounded-full w-max"
-    />
-    <Image src="/00.jpg" width={250} height={250} alt="img" />
-    <Image src="/1.jpg" width={250} height={250} alt="img" />
-    <Image src="/2.jpg" width={250} height={250} alt="img" />
-    <Image src="/3.jpg" width={250} height={250} alt="img" />
-    <Image src="/01.jpg" width={250} height={250} alt="img" />
-    <Image src="/02.jpg" width={250} height={250} alt="img" />
-  </Masonry>
-</ResponsiveMasonry> */
-}

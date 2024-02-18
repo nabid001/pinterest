@@ -19,6 +19,7 @@ import { createComment } from "@/lib/mongodb/actions/pin.actions";
 import Image from "next/image";
 import Link from "next/link";
 import { deleteComment } from "@/lib/mongodb/actions/comment.actions";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 
 export const commentSchema = z.object({
   text: z.string().min(1),
@@ -52,42 +53,50 @@ const CommentForm = ({ author, pinId, comment }: CommentFormParams) => {
   return (
     <>
       <div>
-        {comment?.map((com: PinCommentParams) => (
-          <div key={com?._id} className="flex mb-5 items-start gap-2">
-            <Link href={`/profile/${com?.author?.username}`}>
-              <Image
-                src={com?.author?.photo}
-                alt="user-photo"
-                width={40}
-                height={40}
-                className="rounded-full object-cover"
-              />
-            </Link>
-            <div className="flex flex-col items-start gap-2">
-              <span className="">
+        <>
+          {comment?.length > 0 ? (
+            comment?.map((com: PinCommentParams) => (
+              <div key={com?._id} className="flex mb-5 items-start gap-2">
                 <Link href={`/profile/${com?.author?.username}`}>
-                  <span className="mr-2 cursor-pointer font-medium text-black transition-colors hover:text-slate-800">
-                    {com.author.username}
-                  </span>
+                  <Image
+                    src={com?.author?.photo}
+                    alt="user-photo"
+                    width={35}
+                    height={35}
+                    className="rounded-full object-cover"
+                  />
                 </Link>
-                {com.text}
-              </span>
-              <div className="flex gap-2">
-                {com.author._id == author && (
-                  <>
-                    <span
-                      className="text-sm cursor-pointer"
-                      onClick={() => handleDeleteComment(com._id)}
-                    >
-                      Delete
-                    </span>
-                    <span className="text-sm">Edit</span>
-                  </>
-                )}
+                <div className="flex flex-col items-start gap-2">
+                  <span className="">
+                    <Link href={`/profile/${com?.author?._id}`}>
+                      <span className="mr-2 cursor-pointer font-medium text-black transition-colors hover:text-slate-800 hover:underline">
+                        {com.author.username}
+                      </span>
+                    </Link>
+                    {com.text}
+                  </span>
+                  <div className="flex gap-2">
+                    {com.author._id == author && (
+                      <>
+                        <span
+                          className="text-sm cursor-pointer"
+                          onClick={() => handleDeleteComment(com._id)}
+                        >
+                          Delete
+                        </span>
+                        {/* <span className="text-sm">Edit</span> */}
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+            ))
+          ) : (
+            <span className="text-sm text-gray-500">
+              No comments yet. Add one to start the conversation
+            </span>
+          )}
+        </>
       </div>
       <Form {...form}>
         <form
@@ -106,7 +115,16 @@ const CommentForm = ({ author, pinId, comment }: CommentFormParams) => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <SignedIn>
+            <Button variant="secondary" type="submit">
+              Comment
+            </Button>
+          </SignedIn>
+          <SignedOut>
+            <Button variant="secondary" asChild>
+              <Link href="/login">Comment</Link>
+            </Button>
+          </SignedOut>
         </form>
       </Form>
     </>

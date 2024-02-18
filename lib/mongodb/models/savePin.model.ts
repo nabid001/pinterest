@@ -1,9 +1,10 @@
+import { Types } from "mongoose";
 import { Schema, model, models } from "mongoose";
 
 const savePinSchema = new Schema({
   pinId: {
-    type: String,
-    required: true,
+    type: Schema.Types.ObjectId,
+    ref: "Pin",
   },
   author: {
     type: String,

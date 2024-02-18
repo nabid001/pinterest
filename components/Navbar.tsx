@@ -9,13 +9,16 @@ const Navbar = () => {
         <Link href="/" className="text-wrap  ">
           Home
         </Link>
-        <Link href="/create" className="text-wrap  ">
-          Create
-        </Link>
+        <SignedIn>
+          <Link href="/create" className="text-wrap">
+            Create
+          </Link>
+        </SignedIn>
 
         <input
           type="text"
-          placeholder="Search"
+          disabled={true}
+          placeholder="Search is disabled"
           className="w-full rounded-full bg-slate-200 px-5 py-2 shadow-sm focus:shadow-md focus:outline-none focus:outline-offset-0 focus:outline-[#7fc1ff] focus:transition"
         />
 

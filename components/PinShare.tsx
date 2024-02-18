@@ -29,7 +29,7 @@ import {
 } from "next-share";
 
 const PinShare = ({ pinTitle }: { pinTitle: string }) => {
-  const { href } = window.location;
+  let { href } = window.location;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(href);

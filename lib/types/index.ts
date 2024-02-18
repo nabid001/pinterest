@@ -5,6 +5,7 @@ export type CreatePinParams = {
   tag?: string;
   image: string;
   author: string;
+  createdBy: string;
 };
 
 export type PinParams = {
@@ -70,4 +71,26 @@ export type PinCommentParams = {
     username: string;
     photo: string;
   };
+};
+
+export type CreateUserParams = {
+  clerkId: string;
+  email: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  photo: string;
+};
+
+export type UpdateUserParams = {
+  username: string;
+  firstName: string;
+  lastName: string;
+  photo: string;
+};
+
+export type SavePinProps = {
+  pinId: string;
+  author: string;
+  path: string;
 };

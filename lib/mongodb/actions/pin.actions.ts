@@ -38,6 +38,7 @@ export const createPin = async ({
   description,
   link,
   author,
+  createdBy,
 }: CreatePinParams) => {
   try {
     await connectToDatabase();
@@ -48,6 +49,7 @@ export const createPin = async ({
       description,
       link,
       author,
+      createdBy,
     });
 
     revalidatePath("/");
@@ -170,5 +172,34 @@ export const updatePin = async ({ pin, path, pinId }: UpdatePinProps) => {
     return JSON.parse(JSON.stringify(newPin));
   } catch (error) {
     throw new Error(error as any);
+  }
+};
+
+export const getPinByUserId = async (id: string) => {
+  console.log(id);
+  try {
+    await connectToDatabase();
+
+    const pins = await Pin.find({ createdBy: id }).populate("author");
+
+    if (!id) throw new Error("");
+
+    return JSON.parse(JSON.stringify(pins));
+  } catch (error) {
+    console.log(error as any);
+  }
+};
+
+export const getRelatedPin = async (id: string) => {
+  try {
+    await connectToDatabase();
+
+    const pin = await Pin.find({
+      $and: [{ _id: { $ne: id } }],
+    });
+
+    return JSON.parse(JSON.stringify(pin));
+  } catch (error) {
+    console.log(error as any);
   }
 };

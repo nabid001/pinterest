@@ -24,6 +24,12 @@ const userSchema = new Schema({
   photo: {
     type: String,
   },
+  savePin: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "SavePin",
+    },
+  ],
 });
 
 const User = models.User || model("User", userSchema);

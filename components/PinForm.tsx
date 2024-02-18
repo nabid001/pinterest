@@ -72,6 +72,7 @@ const PinForm = ({ author, type, pin, pinId }: PinFormProps) => {
             description: values.description,
             link: values.link,
             author,
+            createdBy: author,
           });
 
           if (newPin) {
@@ -128,10 +129,10 @@ const PinForm = ({ author, type, pin, pinId }: PinFormProps) => {
               height={380}
               src={pin.image && pin.image}
               alt="uploaded-photo"
-              className="h-full w-full object-fill rounded-lg"
+              className="h-full w-full object-cover overflow-hidden rounded-lg"
             />
           )}
-          {photo ? (
+          {type === "Create" && photo ? (
             <>
               <Image
                 width={300}
@@ -151,12 +152,17 @@ const PinForm = ({ author, type, pin, pinId }: PinFormProps) => {
             />
           )}
         </div>
-        <span
-          onClick={() => setPhoto("")}
-          className="mt-3 cursor-pointer rounded-lg bg-slate-300 px-2 py-1 text-base text-gray-500 transition-colors hover:text-gray-600"
-        >
-          Remove image
-        </span>
+
+        {type === "Create" && (
+          <>
+            <span
+              onClick={() => setPhoto("")}
+              className="mt-3 cursor-pointer rounded-lg bg-slate-300 px-2 py-1 text-base text-gray-500 transition-colors hover:text-gray-600"
+            >
+              Remove image
+            </span>
+          </>
+        )}
       </div>
       <div className="px-4 sm:px-0">
         <Form {...form}>
