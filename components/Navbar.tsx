@@ -1,8 +1,11 @@
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton, auth } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
 const Navbar = () => {
+  const { sessionClaims } = auth();
+
+  const userId = sessionClaims?.userId as string;
   return (
     <header className="container mx-auto pt-3 sticky z-999 top-0 bg-white pb-1">
       <nav className="flex items-center gap-5 ">
@@ -30,6 +33,7 @@ const Navbar = () => {
           </Button>
         </SignedOut>
         <SignedIn>
+          <Link href={`/profile/${userId!}`}>Profile</Link>
           <UserButton afterSignOutUrl="/" />
         </SignedIn>
       </nav>
